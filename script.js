@@ -127,11 +127,6 @@ noBtn.addEventListener('mouseenter', () => {
     }
 });
 
-// Handle "No" button click (if they manage to click it)
-noBtn.addEventListener('click', () => {
-    alert('Aww, the button is too fast! Maybe try the Yes button instead? 😊');
-});
-
 // Create confetti effect
 function createConfetti() {
     const colors = ['#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#ffd700'];
