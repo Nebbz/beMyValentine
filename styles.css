@@ -137,6 +137,8 @@ body {
 .btn-yes {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
+    position: relative;
+    z-index: 2;
 }
 
 .btn-yes:hover {
@@ -148,6 +150,7 @@ body {
     background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
     color: #666;
     position: absolute;
+    z-index: 1;
 }
 
 .btn-no:hover {
