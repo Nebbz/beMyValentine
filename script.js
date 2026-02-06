@@ -43,16 +43,16 @@ noBtn.addEventListener('mouseenter', () => {
     
     // Change No button text to be more pleading
     const messages = [
-        'No',
         'Are you sure?',
         'Really?',
         'Please? 🥺',
         'Think again!',
-        'Noooo!'
+        'Noooo!',
+        'But why? 😢'
     ];
     
-    if (noHoverCount < messages.length) {
-        noBtn.textContent = messages[noHoverCount];
+    if (noHoverCount <= messages.length) {
+        noBtn.textContent = messages[noHoverCount - 1];
     }
 });
 
