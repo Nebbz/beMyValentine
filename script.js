@@ -7,6 +7,39 @@ const successContent = document.getElementById('success-content');
 // Track the number of times "No" is hovered
 let noHoverCount = 0;
 
+// Set initial position for "No" button to avoid overlap on load
+window.addEventListener('DOMContentLoaded', () => {
+    // Get button dimensions and viewport dimensions
+    const btnRect = noBtn.getBoundingClientRect();
+    const yesBtnRect = yesBtn.getBoundingClientRect();
+    const container = document.querySelector('.container');
+    const containerRect = container.getBoundingClientRect();
+    
+    // Position the "No" button to the right of "Yes" button, ensuring no overlap
+    // Place it far enough away that even on mobile it won't overlap
+    const minDistance = 150; // Minimum distance from Yes button
+    const centerX = containerRect.width / 2;
+    const centerY = containerRect.height / 2;
+    
+    // Calculate position to the right and slightly below center
+    let newX = centerX + minDistance;
+    let newY = centerY + 50;
+    
+    // Ensure it stays within viewport bounds
+    const maxX = containerRect.width - btnRect.width - 40;
+    const maxY = containerRect.height - btnRect.height - 40;
+    
+    if (newX > maxX) {
+        newX = centerX - minDistance - btnRect.width;
+    }
+    if (newY > maxY) {
+        newY = maxY;
+    }
+    
+    noBtn.style.left = Math.max(20, newX) + 'px';
+    noBtn.style.top = Math.max(20, newY) + 'px';
+});
+
 // Handle "Yes" button click
 yesBtn.addEventListener('click', () => {
     questionContent.classList.add('hidden');
@@ -22,6 +55,7 @@ noBtn.addEventListener('mouseenter', () => {
     
     // Get button dimensions and viewport dimensions
     const btnRect = noBtn.getBoundingClientRect();
+    const yesBtnRect = yesBtn.getBoundingClientRect();
     const container = document.querySelector('.container');
     const containerRect = container.getBoundingClientRect();
     
@@ -29,9 +63,36 @@ noBtn.addEventListener('mouseenter', () => {
     const maxX = containerRect.width - btnRect.width - 40;
     const maxY = containerRect.height - btnRect.height - 40;
     
-    // Generate random position
-    let newX = Math.random() * maxX;
-    let newY = Math.random() * maxY;
+    // Define a safe distance from the Yes button to avoid overlap
+    const safeDistance = 120;
+    
+    let newX, newY;
+    let attempts = 0;
+    const maxAttempts = 50;
+    
+    // Keep generating random positions until we find one that doesn't overlap with Yes button
+    do {
+        newX = Math.random() * maxX;
+        newY = Math.random() * maxY;
+        
+        // Calculate distance from Yes button center
+        const yesCenterX = yesBtnRect.left - containerRect.left + yesBtnRect.width / 2;
+        const yesCenterY = yesBtnRect.top - containerRect.top + yesBtnRect.height / 2;
+        const noCenterX = newX + btnRect.width / 2;
+        const noCenterY = newY + btnRect.height / 2;
+        
+        const distance = Math.sqrt(
+            Math.pow(noCenterX - yesCenterX, 2) + 
+            Math.pow(noCenterY - yesCenterY, 2)
+        );
+        
+        // If distance is safe, break out of loop
+        if (distance > safeDistance) {
+            break;
+        }
+        
+        attempts++;
+    } while (attempts < maxAttempts);
     
     // Apply new position
     noBtn.style.left = newX + 'px';
